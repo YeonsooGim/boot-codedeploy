@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+  build:
+    commands:
+      - cd ${CODEBUILD_SRC_DIR}/boot
+      - mvn install -f pom.xml 
+  post_build:
+    commands:
+      - mv target/boot-0.0.1-SNAPSHOT.war target/boot.war
+artifacts:
+  files:
+    - ${CODEBUILD_SRC_DIR}/boot/target/boot.war
+    - ${CODEBUILD_SRC_DIR}/boot/appspec.yml
+  name: boot
+  discard-paths: yes
+  
+  
+  
