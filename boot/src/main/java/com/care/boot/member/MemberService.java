@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.care.boot.PageService;
+import com.care.boot.redis.RedisService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 public class MemberService {
 	@Autowired private IMemberMapper mapper;
 	@Autowired private HttpSession session;
+	@Autowired private RedisService redisService;
 	
 	public String registProc(MemberDTO member) {
 		if(member.getId() == null || member.getId().trim().isEmpty()) {
@@ -61,7 +63,7 @@ public class MemberService {
 	}
 	
 	
-	public String loginProc(String id, String pw) {
+	public String loginProc(String id, String pw, String sessionId) {
 		if(id == null || id.trim().isEmpty()) {
 			return "아이디를 입력하세요.";
 		}
@@ -76,6 +78,7 @@ public class MemberService {
 			session.setAttribute("userName", check.getUserName());
 			session.setAttribute("address", check.getAddress());
 			session.setAttribute("mobile", check.getMobile());
+			redisService.save(sessionId, check.getId());
 			/*
 			 * session.setAttribute("member", check);
 			 * ${sessionScope.member.id}
@@ -87,6 +90,9 @@ public class MemberService {
 		
 		return "아이디 또는 비밀번호를 확인 후 다시 입력하세요.";
 	}
+	
+	
+	
 	public void memberInfo(String select, String search, String cp, Model model) {
 		int currentPage = 1;
 		try{
