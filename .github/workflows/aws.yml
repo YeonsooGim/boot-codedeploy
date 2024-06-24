@@ -46,7 +46,7 @@ jobs:
           [{"Key":"InstanceIds","Values":["i-003c14b3a5a27a480"]}]
         document-name: AWS-RunShellScript
         parameters: |
-          {"commands":["uname -a"]}
+          {"commands":["sudo systemctl stop tomcat", "sudo rm -rf /opt/tomcat/tomacat-10/webapps/boot.war", "sudo cp boot/target/boot-0.0.1-SNAPSHOT.war.war /opt/tomcat/tomacat-10/webapps/boot.war", "sudo systemctl start tomcat"]}
           
     # - name: Deploy to EC2 via SSM
     #   uses: aws-actions/configure-aws-credentials@v1
