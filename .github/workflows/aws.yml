@@ -29,7 +29,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: myapp
-        path: target/boot.war
+        path: boot/target/boot-0.0.1-SNAPSHOT.war
 
     - name: Download artifact on deploy runner
       uses: actions/download-artifact@v2
@@ -50,5 +50,5 @@ jobs:
         aws ssm send-command \
           --document-name "AWS-RunShellScript" \
           --targets "Key=instanceids,Values=${{ secrets.INSTANCE_ID }}" \
-          --parameters '{"commands":["sudo systemctl stop tomcat", "sudo rm -rf /opt/tomcat/tomacat-10/webapps/boot.war", "sudo cp target/boot.war /opt/tomcat/tomacat-10/webapps/boot.war", "sudo systemctl start tomcat"]}' \
+          --parameters '{"commands":["sudo systemctl stop tomcat", "sudo rm -rf /opt/tomcat/tomacat-10/webapps/boot.war", "sudo cp boot/target/boot-0.0.1-SNAPSHOT.war.war /opt/tomcat/tomacat-10/webapps/boot.war", "sudo systemctl start tomcat"]}' \
           --timeout-seconds 600
