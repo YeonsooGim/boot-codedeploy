@@ -43,7 +43,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
         targets: |
-          [{"Key":"InstanceIds","Values":[${{ secrets.INSTANCE_ID }}]}]
+          [{"Key":"InstanceIds","Values":["i-003c14b3a5a27a480"}]
         document-name: AWS-RunShellScript
         parameters: |
           {"commands":["uname -a"]}
