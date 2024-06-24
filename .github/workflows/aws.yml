@@ -36,31 +36,31 @@ jobs:
       with:
         name: myapp
         
-    - name: Run aws ssm send-command
-      uses: nohmad/aws-ssm-send-command-action@master
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-2
-        targets: |
-          [{"Key":"InstanceIds","Values":["i-003c14b3a5a27a480"]}]
-        document-name: AWS-RunShellScript
-        parameters: |
-          {"commands":["sudo systemctl stop tomcat", "sudo rm -rf /opt/tomcat/tomacat-10/webapps/boot.war", "sudo cp boot/target/boot-0.0.1-SNAPSHOT.war.war /opt/tomcat/tomacat-10/webapps/boot.war", "sudo systemctl start tomcat"]}
-          
-    # - name: Deploy to EC2 via SSM
-    #   uses: aws-actions/configure-aws-credentials@v1
+    # - name: Run aws ssm send-command
+    #   uses: nohmad/aws-ssm-send-command-action@master
     #   with:
-    #     aws-region: ${{ secrets.AWS_REGION }}
-    #     instance-id: ${{ secrets.INSTANCE_ID }}
-    #     document-name: "AWS-RunShellScript"
-    #     access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: ap-northeast-2
+    #     targets: |
+    #       [{"Key":"InstanceIds","Values":[${{ secrets.INSTANCE_ID }}]}]
+    #     document-name: AWS-RunShellScript
+    #     parameters: |
+    #       {"commands":["sudo systemctl stop tomcat", "sudo rm -rf /opt/tomcat/tomacat-10/webapps/boot.war", "sudo cp boot/target/boot-0.0.1-SNAPSHOT.war.war /opt/tomcat/tomacat-10/webapps/boot.war", "sudo systemctl start tomcat"]}
+          
+    - name: Deploy to EC2 via SSM
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: ${{ secrets.AWS_REGION }}
+        instance-id: ${{ secrets.INSTANCE_ID }}
+        document-name: "AWS-RunShellScript"
+        access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         
-    # - name: Run SSM command
-    #   run: |
-    #     aws ssm send-command \
-    #       --document-name "AWS-RunShellScript" \
-    #       --targets "Key=instanceids,Values=${{ secrets.INSTANCE_ID }}" \
-    #       --parameters '{"commands":["sudo systemctl stop tomcat", "sudo rm -rf /opt/tomcat/tomacat-10/webapps/boot.war", "sudo cp boot/target/boot-0.0.1-SNAPSHOT.war.war /opt/tomcat/tomacat-10/webapps/boot.war", "sudo systemctl start tomcat"]}' \
-    #       --timeout-seconds 600
+    - name: Run SSM command
+      run: |
+        aws ssm send-command \
+          --document-name "AWS-RunShellScript" \
+          --targets "Key=instanceids,Values=${{ secrets.INSTANCE_ID }}" \
+          --parameters '{"commands":["sudo systemctl stop tomcat", "sudo rm -rf /opt/tomcat/tomacat-10/webapps/boot.war", "sudo cp boot/target/boot-0.0.1-SNAPSHOT.war.war /opt/tomcat/tomacat-10/webapps/boot.war", "sudo systemctl start tomcat"]}' \
+          --timeout-seconds 600
