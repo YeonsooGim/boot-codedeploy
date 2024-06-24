@@ -37,7 +37,7 @@ jobs:
         name: myapp
 
     - name: Deploy to EC2 via SSM
-      uses: aws-actions/configure-aws-credentials@v4
+      uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-region: ${{ secrets.AWS_REGION }}
         instance-id: ${{ secrets.INSTANCE_ID }}
